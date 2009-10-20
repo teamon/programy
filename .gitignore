@@ -1,0 +1,6 @@
+*.mode1v3
+.DS_Store
+profile
+
+Kalman/Kalman/build/*
+!Kalman/Kalman/build/Debug/

@@ -1,0 +1,4 @@
+desc "Show graph"
+task :run do
+  `rp5 run graph.rb`
+end
