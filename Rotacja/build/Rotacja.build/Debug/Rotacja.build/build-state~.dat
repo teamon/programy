@@ -1,0 +1,59 @@
+TRotacja
+v7
+r0
+t277811295.455174
+cCheck dependencies
+cCompileC build/Rotacja.build/Debug/Rotacja.build/Objects-normal/x86_64/main.o /Users/teamon/Desktop/Rotacja/main.cpp normal x86_64 c++ com.apple.compilers.gcc.4_2
+cLd /Users/teamon/Desktop/Rotacja/build/Debug/Rotacja normal x86_64
+
+N/Developer/SDKs/MacOSX10.6.sdk
+c000000004ABBF0FD00000000000000EE
+t1253830909
+s238
+
+N/Users/teamon/Desktop/Rotacja/build/Debug/Rotacja
+t1256118495
+s29784
+
+N/Users/teamon/Desktop/Rotacja/build/Rotacja.build/Debug/Rotacja.build/Objects-normal/x86_64/Rotacja.LinkFileList
+c000000004ADED8DD0000000000000063
+t1256118493
+s99
+
+N/Users/teamon/Desktop/Rotacja/build/Rotacja.build/Debug/Rotacja.build/Objects-normal/x86_64/main.o
+t1256118494
+s99920
+
+N/Users/teamon/Desktop/Rotacja/main.cpp
+c000000004ADED8DB00000000000000AD
+t1256118491
+s173
+i<iostream>
+
+CCheck dependencies
+r0
+lSLF07#2@18"Check dependencies277811293#277811293#0(0"0(0#1#0"7947009927035180032#0"0#
+
+CCompileC build/Rotacja.build/Debug/Rotacja.build/Objects-normal/x86_64/main.o /Users/teamon/Desktop/Rotacja/main.cpp normal x86_64 c++ com.apple.compilers.gcc.4_2
+s277811293.858739
+e277811294.897869
+r1
+xCompileC
+xbuild/Rotacja.build/Debug/Rotacja.build/Objects-normal/x86_64/main.o
+x/Users/teamon/Desktop/Rotacja/main.cpp
+xnormal
+xx86_64
+xc++
+xcom.apple.compilers.gcc.4_2
+lSLF07#2@46"Compile /Users/teamon/Desktop/Rotacja/main.cpp277811293#277811294#0(0"0(0#0#38"/Users/teamon/Desktop/Rotacja/main.cpp7809643567100341248#1239"    cd /Users/teamon/Desktop/Rotacja    setenv LANG en_US.US-ASCII    /Developer/usr/bin/gcc-4.2 -x c++ -arch x86_64 -fmessage-length=0 -pipe -Wno-trigraphs -fpascal-strings -fasm-blocks -O0 -Wreturn-type -Wunused-variable -D_GLIBCXX_DEBUG=1 -D_GLIBCXX_DEBUG_PEDANTIC=1 -isysroot /Developer/SDKs/MacOSX10.6.sdk -mfix-and-continue -fvisibility-inlines-hidden -mmacosx-version-min=10.6 -gdwarf-2 -iquote /Users/teamon/Desktop/Rotacja/build/Rotacja.build/Debug/Rotacja.build/Rotacja-generated-files.hmap -I/Users/teamon/Desktop/Rotacja/build/Rotacja.build/Debug/Rotacja.build/Rotacja-own-target-headers.hmap -I/Users/teamon/Desktop/Rotacja/build/Rotacja.build/Debug/Rotacja.build/Rotacja-all-target-headers.hmap -iquote /Users/teamon/Desktop/Rotacja/build/Rotacja.build/Debug/Rotacja.build/Rotacja-project-headers.hmap -F/Users/teamon/Desktop/Rotacja/build/Debug -I/Users/teamon/Desktop/Rotacja/build/Debug/include -I/Users/teamon/Desktop/Rotacja/build/Rotacja.build/Debug/Rotacja.build/DerivedSources/x86_64 -I/Users/teamon/Desktop/Rotacja/build/Rotacja.build/Debug/Rotacja.build/DerivedSources -c /Users/teamon/Desktop/Rotacja/main.cpp -o /Users/teamon/Desktop/Rotacja/build/Rotacja.build/Debug/Rotacja.build/Objects-normal/x86_64/main.o0#
+
+CLd /Users/teamon/Desktop/Rotacja/build/Debug/Rotacja normal x86_64
+s277811294.897999
+e277811295.454948
+r1
+xLd
+x/Users/teamon/Desktop/Rotacja/build/Debug/Rotacja
+xnormal
+xx86_64
+lSLF07#2@54"Link /Users/teamon/Desktop/Rotacja/build/Debug/Rotacja277811294#277811295#0(0"0(0#0#0"31525674140565612#453"    cd /Users/teamon/Desktop/Rotacja    setenv MACOSX_DEPLOYMENT_TARGET 10.6    /Developer/usr/bin/g++-4.2 -arch x86_64 -isysroot /Developer/SDKs/MacOSX10.6.sdk -L/Users/teamon/Desktop/Rotacja/build/Debug -F/Users/teamon/Desktop/Rotacja/build/Debug -filelist /Users/teamon/Desktop/Rotacja/build/Rotacja.build/Debug/Rotacja.build/Objects-normal/x86_64/Rotacja.LinkFileList -mmacosx-version-min=10.6 -o /Users/teamon/Desktop/Rotacja/build/Debug/Rotacja0#
+
