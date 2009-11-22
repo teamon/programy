@@ -15,7 +15,6 @@ struct User {
 
 vector<User> users;
 
-
 void load_database() {
 	ifstream f(DATA_FILE);
 	if(f.good()){
@@ -23,7 +22,8 @@ void load_database() {
 			User user;
 			f >> user.last_name;
 			f >> user.first_name;
-			users.push_back(user);
+			if(user.last_name != "" && user.first_name != "")
+				users.push_back(user);
 		}
 	}
 	f.close();
@@ -33,8 +33,8 @@ void save_database() {
 	ofstream f(DATA_FILE);
 	if (f.good()){
 		for(vector<User>::iterator i = users.begin(); i!=users.end(); ++i){
-			f << i->last_name;
-			f << i->first_name;
+			f << i->last_name << endl;
+			f << i->first_name << endl;
 		}
 	}
 	else cout << "Wystąpił błąd podczas zapisu" << endl;
@@ -46,7 +46,6 @@ int main (int argc, char * const argv[]) {
 	
 	load_database();
 	
-	
 	while(true){
 		User user;
 		
@@ -55,7 +54,8 @@ int main (int argc, char * const argv[]) {
 		cout << "[2] Dodaj użytkownika" << endl;
 		cout << "[9] Zakończ program" << endl;
 		cin >> option;
-		system("clear");
+		//system("clear");
+		
 		
 		switch (option) {
 			case 1:
@@ -63,20 +63,25 @@ int main (int argc, char * const argv[]) {
 				cout << " ID  | NAZWISKO             | IMIĘ       " << endl;
 				cout << "-----------------------------------------" << endl;
 				for(int i=0; i<users.size(); ++i){
-					cout << right << " " << setw(3) << (i+1) << " | ";
-					cout << left << setw(20) << users.at(i).last_name << " | ";
+					cout << " ";
+					cout << setw(3) << (i+1) << " | ";
+					cout << setw(20) << left << users.at(i).last_name << " | ";
 					cout << setw(10) << users.at(i).first_name;
-					cout << endl;
+					cout << right << endl;
 				}
 				cout << endl;
 				break;
 				
 			case 2:
 				cout << "Podaj dane nowego użytkownika:" << endl;
-				cout << "Imię: ";
-				cin >> user.first_name;
 				cout << "Nazwisko: ";
 				cin >> user.last_name;
+				cout << "Imię: ";
+				cin >> user.first_name;
+				users.push_back(user);
+				save_database();
+				cout << "Użytkownik został pomyślnie dodany" << endl;
+				
 				break;
 				
 			case 9:
@@ -85,7 +90,6 @@ int main (int argc, char * const argv[]) {
 				
 				
 			default:
-				
 				break;
 		}
 		
