@@ -1,18 +1,10 @@
-#define DATA_FILE "data.txt"
-
-/*
-	+ list_users
-		// choose user
-		+ list_tests(*user)
-		+ new_test(*user)
-	+ add_user
- */
+#define USERS_DATA_FILE "users.txt"
+#define TESTS_DATA_FILE "tests.txt"
 
 #include <iostream>
 #include <iomanip>
 #include <fstream>
 #include <string>
-#include <vector>
 
 using namespace std;
 
@@ -20,20 +12,29 @@ struct Test;
 struct User;
 struct MenuItem;
 void show_menu(MenuItem * items, int count);
+void show_menu(MenuItem * items, int count, bool(* break_menu)());
 void load_database();
+void load_users_database();
+void load_tests_database();
+void save_users_database();
+void save_tests_database();
 void save_database();
 void list_user_tests();
 void new_user_test();
 void list_users();
 void add_user();
+void delete_user();
+void update_user();
+bool deleted_user();
 
 struct User {
+	unsigned int id;
 	string first_name;
 	string last_name;
-	vector<Test> tests;
 };
 struct Test {
-	User * user;
+	int id;
+	int user_id;
 	int result;
 };
 struct MenuItem {
@@ -41,191 +42,121 @@ struct MenuItem {
 	void (* function)();
 };
 
-vector<User> users;
+User * users;
+Test * tests;
+int users_num, tests_num;
+int users_max_id, tests_max_id;
+
 User * current_user;
 char operations[4] = { '+', '*', '-', '/' };
-
-
-/*
-//void check_answer(Test &test, int a, int b, int c, char oper){
-//	switch(oper){
-//		case '+':
-//			if(a + b == c) test.result++;
-//			break;
-//		case '-':
-//			if(a - b == c) test.result++;
-//			break;
-//		case '*':
-//			if(a * b == c) test.result++;
-//			break;
-//	}
-//}
-*/
 
 void clear_screen(){
 	system("clear");
 }
-
 int random(int max){
 	return rand() % max;
 }
 
-
-
 int main (int argc, char * const argv[]) {
 	load_database();
-	
-	MenuItem a[] = {
+
+	MenuItem items[] = {
 		"Pokaż listę użytkowników", list_users,
 		"Dodaj użytkownika", add_user
 	};
-	show_menu(a, sizeof(a) / sizeof(MenuItem));
-	
+	show_menu(items, sizeof(items) / sizeof(MenuItem));
+
 	save_database();
 	return 0;
 }
-	
-	
-	/*
-	//clear_screen();
-	//
-	//	while(true){
-	//		
-	//		clear_screen();
-	//		cout << "[1] Pokaż listę użytkowników" << endl;
-	//		cout << "[2] Dodaj użytkownika" << endl;
-	//		cout << "[0] Zakończ program" << endl;
-	//		cout << "Wybierz pozycję z menu: ";
-	//		cin >> option;
-	//		clear_screen();
-	//		
-	//		
-	//		switch (option) {
-	//			case 1:
-	//				while (true) {
-	//					cout << "Lista użytkowników:" << endl;
-	//					cout << " ID  | NAZWISKO             | IMIĘ       " << endl;
-	//					cout << "-----------------------------------------" << endl;
-	//					for(int i=0; i<users.size(); ++i){
-	//						cout << " ";
-	//						cout << setw(3) << (i+1) << " | ";
-	//						cout << setw(20) << left << users.at(i).last_name << " | ";
-	//						cout << setw(10) << users.at(i).first_name;
-	//						cout << right << endl;
-	//					}
-	//					cout << endl;
-	//					
-	//					int user_id;
-	//					
-	//					cout << "Podaj ID użytkownika (0 aby powrócić): " << endl;
-	//					cin >> user_id;
-	//					
-	//					if(user_id <= 0) break;
-	//					
-	//					if (user_id > users.size()) {
-	//						cout << "Użytkownik o podanym ID nie istnieje!" << endl;
-	//						continue;
-	//					}
-	//					
-	//					User * user = &users[user_id-1];
-	//					
-	//					
-	//					
-	//					int opt = -1;
-	//					
-	//					while(true){
-	//						if(opt == 0) break;
-	//						
-	//						clear_screen();
-	//						cout << "Wybrałeś użytkownika: " << user->first_name << " " << user->last_name << endl;
-	//						cout << "[1] Pokaż testy użytkownika" << endl;
-	//						cout << "[2] Nowy test" << endl;
-	//						cout << "[0] Powrót" << endl;
-	//						cout << "Wybierz pozycję z menu: ";
-	//						cin >> opt;
-	//						
-	//						switch (opt) {
-	//							case 1:
-	//								
-	//								break;
-	//								
-	//							case 2:
-	//								Test test;
-	//								test.user = user;
-	//								test.result = 0;
-	//								int a,b,c;
-	//								char oper;
-	//								
-	//								for(int i=1; i<=10; i++){
-	//									cout << i << ") ";
-	//									
-	//									a = random(10);
-	//									b = random(10);
-	//									oper = operations[random(3)];
-	//									
-	//									cout << a << " " << oper << " " << b << " = ";
-	//									cin >> c;
-	//									
-	//									check_answer(test, a, b, c, oper);
-	//								}
-	//								
-	//								user->tests.push_back(test);
-	//								
-	//																
-	//								cout << "Twój wynik to: " << test.result << "/10" << endl;
-	//								cout << "Naciśnij enter aby powrócić";
-	//								cin.ignore();
-	//								cin.get();
-	//								
-	//								
-	//								break;
-	//								
-	//								
-	//							default:
-	//								break;
-	//						}
-	//					}
-	//					
-	//					clear_screen();
-	//					
-	//				}
-	//				
-	//				
-	//				break;
-	//				
-	//			case 2:
-	//				{
-	//					User user;
-	//					cout << "Podaj dane nowego użytkownika:" << endl;
-	//					cout << "Nazwisko: ";
-	//					cin >> user.last_name;
-	//					cout << "Imię: ";
-	//					cin >> user.first_name;
-	//					users.push_back(user);
-	//					save_database();
-	//					cout << "Użytkownik został pomyślnie dodany" << endl;
-	//				}
-	//				break;
-	//				
-	//			case 0:
-	//				return 0;
-	//				break;
-	//				
-	//				
-	//			default:
-	//				break;
-	//		}
-	//		
-	//	}
-	//	
- //   return 0;
-//}//
+void load_database() {
+	load_users_database();
+	load_tests_database();
+}
+void load_users_database(){
+	ifstream f(USERS_DATA_FILE);
+	if(f.good()){
+		f >> users_num;
+		users_max_id = 0;
+		users = new User[users_num];
+		int i=0;
+		while (!f.eof()) {
+			User user;
+			f >> user.id;
+			f >> user.last_name;
+			f >> user.first_name;
+			if(user.last_name != "" && user.first_name != ""){
+				users[i] = user;
+				if(user.id > users_max_id) users_max_id = user.id;
+				i++;
+			}
+		}
+		f.close();
+	}
+}
+void load_tests_database(){
+	ifstream f(TESTS_DATA_FILE);
+	if(f.good()){
+		f >> tests_num;
+		tests_max_id = 0;
+		tests = new Test[tests_num];
+		int i=0;
+		while (!f.eof()) {
+			Test test;
+			f >> test.id;
+			f >> test.user_id;
+			f >> test.result;
+			tests[i] = test;
+			if(test.id > tests_max_id) tests_max_id = test.id;
+			i++;
+			
+		}
+		f.close();
+	}
+}
 
-*/
-
+void save_database() {
+	save_users_database();
+	save_tests_database();
+}
+void save_users_database(){
+	ofstream f(USERS_DATA_FILE);
+	if (f.good()){
+		f << users_num << endl;
+		
+		for(User *u = users; u < users+users_num; u++){
+			f << u->id << endl;
+			f << u->last_name << endl;
+			f << u->first_name << endl;
+		}
+	}
+	else cout << "Wystąpił błąd podczas zapisu" << endl;
+	f.close();
+	
+}
+void save_tests_database(){
+	ofstream f(TESTS_DATA_FILE);
+	if (f.good()){
+		f << tests_num << endl;
+		
+		for(Test *t = tests; t < tests+tests_num; t++){
+			f << t->id << endl;
+			f << t->user_id << endl;
+			f << t->result << endl;
+		}
+	}
+	else cout << "Wystąpił błąd podczas zapisu" << endl;
+	f.close();
+}
+	
 void show_menu(MenuItem * items, int count){
+	show_menu(items, count, NULL);
+}
+void show_menu(MenuItem * items, int count, bool (* break_menu)()){
 	int option;
 	while(true){
+		if(break_menu && break_menu()) break;
+		
 		for(int i = 0; i < count; i++)
 			cout << "[" << i+1 << "] " << items[i].description << endl;
 		
@@ -233,6 +164,7 @@ void show_menu(MenuItem * items, int count){
 		cout << "Wybierz opcję z menu: ";
 		cin >> option;
 		if(option == 0) break;
+		
 		if(option > count) {
 			cout << "[ERROR] Podana opcja nie istnieje" << endl;
 			continue;
@@ -242,49 +174,78 @@ void show_menu(MenuItem * items, int count){
 	}
 }
 
-void load_database() {
-	ifstream f(DATA_FILE);
-	if(f.good()){
-		while (!f.eof()) {
-			User user;
-			f >> user.last_name;
-			f >> user.first_name;
-			if(user.last_name != "" && user.first_name != "")
-				users.push_back(user);
-		}
-	}
-	f.close();
-}
-void save_database() {
-	ofstream f(DATA_FILE);
-	if (f.good()){
-		for(vector<User>::iterator i = users.begin(); i!=users.end(); ++i){
-			f << i->last_name << endl;
-			f << i->first_name << endl;
-		}
-	}
-	else cout << "Wystąpił błąd podczas zapisu" << endl;
-	f.close();
-}
-
-// tests
 void list_user_tests(){
-	
+	for(int j=0; j<tests_num; j++){
+		if(tests[j].user_id == current_user->id) count++;
+	}
 }
 void new_user_test(){
+	Test test;
+	test.user_id = current_user->id;
+	test.result = 0;
+	int a,b,c;
+	char oper;
 	
+	for(int i=1; i<=10; i++){
+		cout << i << ") ";
+		a = random(10);
+		b = random(10);
+		oper = operations[random(4)];
+		
+		if(oper == '/') cout << (a*b);
+		else cout << a;
+			
+		cout << " " << oper << " " << b << " = ";
+		cin >> c;
+		
+		switch(oper){
+			case '+':
+				if(a + b == c) test.result++;
+				break;
+			case '-':
+				if(a - b == c) test.result++;
+				break;
+			case '*':
+				if(a * b == c) test.result++;
+				break;
+			case '/':
+				if(c == a) test.result++;
+				break;
+		}
+	}
+		
+	Test * old_tests = tests;
+	
+	test.id = ++tests_max_id;
+	tests_num++;
+		
+	tests = new Test[tests_num];
+	for(int i=0; i<tests_num-1; i++) tests[i] = old_tests[i];
+	tests[tests_num-1] = test;
+	save_database();
+	
+	cout << "Twój wynik to: " << test.result << "/10" << endl;
+	cout << "Naciśnij enter aby powrócić";
+	cin.ignore();
+	cin.get();
 }
 
+User * get_user(int user_id){
+	for(User * u = users; u<users+users_num; u++)
+		if(u->id == user_id) return u;
+	return NULL;
+}
+ 
 // users
 void list_users(){
 	cout << "Lista użytkowników:" << endl;
 	cout << " ID  | NAZWISKO             | IMIĘ       " << endl;
 	cout << "-----------------------------------------" << endl;
-	for(int i=0; i<users.size(); ++i){
+	for(int i=0; i<users_num; ++i){
 		cout << " ";
-		cout << setw(3) << (i+1) << " | ";
-		cout << setw(20) << left << users.at(i).last_name << " | ";
-		cout << setw(10) << users.at(i).first_name;
+		cout << setw(3) << users[i].id << " | ";
+		cout << setw(20) << left << users[i].last_name << " | ";
+		cout << setw(10) << users[i].first_name;
 		cout << right << endl;
 	}
 	cout << endl;
@@ -295,25 +256,88 @@ void list_users(){
 		cin >> user_id;
 		
 		if(user_id <= 0) return;
-		else if(user_id > users.size()) {
-			cout << "[ERROR] Użytkownik o podanym ID nie istnieje!" << endl;
-			continue;
-		} else {
-			break;
+		else {
+			current_user = get_user(user_id);
+			if(current_user == NULL){
+				cout << "[ERROR] Użytkownik o podanym ID nie istnieje!" << endl;
+				continue;
+			} else {
+				break;
+			}
+		}
+		
+		
+	}
+
+	MenuItem items[] = {
+		"Pokaż testy użytkownika", list_user_tests,
+		"Nowy test", new_user_test,
+		"Zmień dane użytkownika", update_user,
+		"Usuń użytkownika", delete_user
+	};
+	show_menu(items, sizeof(items) / sizeof(MenuItem), deleted_user);
+}
+void add_user(){
+	User new_user;
+	cout << "Podaj dane nowego użytkownika:" << endl;
+	cout << "Nazwisko: ";
+	cin >> new_user.last_name;
+	cout << "Imię: ";
+	cin >> new_user.first_name;
+	new_user.id = ++users_max_id;
+	users_num++;
+	
+	User * old_users = users;
+	
+	users = new User[users_num];
+	for(int i=0; i<users_num-1; i++) users[i] = old_users[i];
+	users[users_num-1] = new_user;
+	
+	save_database();
+}
+void delete_user(){
+	User * old_users = users;
+	users_num--;
+	
+	users = new User[users_num];
+	int i = 0;
+	User * u = old_users;
+	
+	for(; u < current_user; u++, i++) users[i] = *u;
+	for(u++; u<old_users+users_num+1; u++, i++) users[i]= *u;
+	
+	
+	Test * old_tests = tests;
+	int count=0;
+	for(int j=0; j<tests_num; j++){
+		if(tests[j].user_id == current_user->id) count++;
+	}
+	
+	
+	tests = new Test[tests_num-count];
+	
+	for(int j=0, k=0; j<tests_num; j++){
+		if(tests[j].user_id != current_user->id) {
+			tests[k] = old_tests[j];
+			k++;
 		}
 	}
 	
-	current_user = &users[user_id-1];
+	tests_num -= count;
 	
-	MenuItem a[] = {
-		"Pokaż testy użytkowników", list_user_tests,
-		"Nowy test", new_user_test
-	};
-	show_menu(a, sizeof(a) / sizeof(MenuItem));
-	
+	current_user = NULL;
+	save_database();
 }
-void add_user(){
-	
+void update_user(){
+	cout << "Podaj nowe dane użytkownika:" << endl;
+	cout << "Nazwisko: ";
+	cin >> current_user->last_name;
+	cout << "Imię: ";
+	cin >> current_user->first_name;
+	save_database();
 }
 
+bool deleted_user(){
+	return current_user == NULL;
+}
 
