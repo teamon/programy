@@ -19,6 +19,7 @@ void load_tests_database();
 void save_users_database();
 void save_tests_database();
 void save_database();
+void list_tests();
 void list_user_tests();
 void new_user_test();
 void list_users();
@@ -62,7 +63,8 @@ int main (int argc, char * const argv[]) {
 
 	MenuItem items[] = {
 		"Pokaż listę użytkowników", list_users,
-		"Dodaj użytkownika", add_user
+		"Dodaj użytkownika", add_user,
+		"Pokaż liste testów", list_tests
 	};
 	show_menu(items, sizeof(items) / sizeof(MenuItem));
 
@@ -73,6 +75,12 @@ void load_database() {
 	load_users_database();
 	load_tests_database();
 }
+
+int compare_users(const void * a, const void * b){	
+	short c = (((User *)a)->last_name).compare(((User *)b)->last_name);
+	if(c == 0) return (((User *)a)->first_name).compare(((User *)b)->first_name);
+	else return c;
+}
 void load_users_database(){
 	ifstream f(USERS_DATA_FILE);
 	if(f.good()){
@@ -80,7 +88,7 @@ void load_users_database(){
 		users_max_id = 0;
 		users = new User[users_num];
 		int i=0;
-		while (!f.eof()) {
+		while (!f.eof() && i < users_num) {
 			User user;
 			f >> user.id;
 			f >> user.last_name;
@@ -93,6 +101,9 @@ void load_users_database(){
 		}
 		f.close();
 	}
+	
+	qsort(users, users_num, sizeof(User), compare_users);
+	
 }
 void load_tests_database(){
 	ifstream f(TESTS_DATA_FILE);
@@ -101,7 +112,7 @@ void load_tests_database(){
 		tests_max_id = 0;
 		tests = new Test[tests_num];
 		int i=0;
-		while (!f.eof()) {
+		while (!f.eof() && i < tests_num) {
 			Test test;
 			f >> test.id;
 			f >> test.user_id;
@@ -174,10 +185,58 @@ void show_menu(MenuItem * items, int count, bool (* break_menu)()){
 	}
 }
 
-void list_user_tests(){
-	for(int j=0; j<tests_num; j++){
-		if(tests[j].user_id == current_user->id) count++;
+User * get_user(int user_id){
+	for(User * u = users; u<users+users_num; u++)
+		if(u->id == user_id) return u;
+	return NULL;
+}
+
+
+
+void list_tests(){
+	cout << "Lista testów:" << endl;
+	cout << "  ID |  WYNIK | NAZWISKO             | IMIĘ       " << endl;
+	cout << "--------------------------------------------------" << endl;
+	
+	int sum=0;
+	User * user;
+	
+	for(int i=0; i<tests_num; i++){
+		cout << " ";
+		cout << setw(3) << tests[i].id << " | ";
+		cout << setw(3) << tests[i].result << "/10" << " | ";
+		
+		user = get_user(tests[i].user_id);
+		
+		cout << setw(20) << left << user->last_name << " | ";
+		cout << setw(10) << user->first_name;
+		cout << right << endl;
+		
+		sum += tests[i].result;
 	}
+	cout << "--------------------------------------------------" << endl;
+	cout << "RAZEM: " << sum << "/" << tests_num*10 << " (" << setprecision(2) << (((float)sum)/tests_num*10) << "%)" << endl;	
+}
+
+void list_user_tests(){
+	cout << "Lista testów:" << endl;
+	cout << "  ID |  WYNIK  " << endl;
+	cout << "---------------" << endl;
+	
+	int sum=0,k=0;
+	
+	for(int i=0; i<tests_num; i++){
+		if(tests[i].user_id == current_user->id){
+			cout << " ";
+			cout << setw(3) << tests[i].id << " | ";
+			cout << setw(3) << tests[i].result << "/10" << endl;
+			k++;
+			sum += tests[i].result;
+		}
+	}
+	cout << "--------------" << endl;
+	cout << "RAZEM: " << sum << "/" << k*10 << " (" << setprecision(2) << (((float)sum)/k*10) << "%)" << endl;	
+	
 }
 void new_user_test(){
 	Test test;
@@ -230,13 +289,8 @@ void new_user_test(){
 	cin.get();
 }
 
-User * get_user(int user_id){
-	for(User * u = users; u<users+users_num; u++)
-		if(u->id == user_id) return u;
-	return NULL;
-}
- 
-// users
+
+
 void list_users(){
 	cout << "Lista użytkowników:" << endl;
 	cout << " ID  | NAZWISKO             | IMIĘ       " << endl;
